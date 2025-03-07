@@ -1,0 +1,318 @@
+*, *::before, *::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+ul,
+li {
+  list-style-type: none;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+body {
+  height: 100vh;
+  background-color: #0c1c1f;
+  color: #444;
+  display: grid;
+  grid-template-rows: 80px 1fr 80px;
+}
+
+.header,
+.footer {
+  padding: 30px;
+  color: whitesmoke;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  position: relative;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-top: 4px solid lightgray;
+  border-bottom: 4px solid lightgray;
+  box-shadow: inset 0 0 50px 0px black;
+}
+
+.library {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  align-content: space-evenly;
+  gap: 20px;
+}
+
+.book {
+  padding: 10px;
+  border: 4px solid #444;
+  background-color: whitesmoke;
+  box-shadow: 0 0 12px palegreen;
+  color: #444;
+  border-radius: 10px;
+  max-height: 240px;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-template-areas: 
+    "title title title title"
+    "author author author author"
+    "pages pages pages pages"
+    "read read read read"
+    "buttons buttons buttons buttons";
+  gap: 10px;
+  justify-items: center;
+}
+
+.book > :first-child,
+.book > :not(:last-child, :first-child) {
+  position: relative;
+}
+
+.book > :first-child::after,
+.book > :not(:last-child, :first-child)::after {
+  position: absolute;
+  content: "";
+  bottom: -6px;
+  width: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-bottom: 1px solid gray;
+}
+
+.book > :first-child::after {
+  width: 150px;
+  border-width: 2px;
+  border-color: #444;
+}
+
+.title {
+  grid-area: title;
+  align-self: start;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.author {
+  grid-area: author;
+  align-self: center;
+  text-align: right;
+}
+
+.pages {
+  grid-area: pages;
+  align-self: center;
+}
+
+.read {
+  grid-area: read;
+  align-self: center;
+}
+
+.buttons {
+  grid-area: buttons;
+  justify-self: center;
+
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button.read,
+.button.remove {
+  width: 40%;
+  padding: 5px;
+  border: 2px solid;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.button.read {
+  background-color: rgba(20, 220, 120, 0.5);
+  border-color: rgb(20, 60, 20);
+}
+
+.button.read:hover,
+.button.remove:hover {
+  transform: scale(1.1);
+}
+
+.button.read:active,
+.button.remove:active {
+  transform: scale(0.9);
+}
+
+.button.remove {
+  background-color: rgba(220, 20, 120, 0.6);
+  border-color: rgb(60, 20, 20);
+}
+
+#new-book {
+  margin-left: auto;
+  padding:  20px;
+  height: 36px;
+  width: max(120px, 20%);
+  border: 2px solid whitesmoke;
+  border-radius: 10px;
+  background-color: darkgreen;
+  color: whitesmoke;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#new-book svg {
+  height: 32px;
+}
+
+#new-book span {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  background-color: transparent;
+  animation: fade-out 0.3s ease-in-out;
+}
+
+#dialog:open {
+  animation: fade-in 0.3s ease-in-out;
+}
+
+#dialog::backdrop {
+  animation: backdrop-fade-in 0.3s ease-in-out forwards;
+}
+
+#dialog form {
+  padding: 30px;
+  border: 3px solid whitesmoke;
+  border-radius: 20px;
+  background-color: #111;
+
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  row-gap: 10px;
+}
+
+#dialog .row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: whitesmoke;
+}
+
+.row label {
+  width: 70px;
+  text-align: left;
+}
+
+.row input {
+  height: 24px;
+  padding: 2px 8px;
+  border: 1px solid whitesmoke;
+  background-color: rgba(120, 120, 120, 0.4);
+  border-radius: 8px;
+  color: whitesmoke;
+}
+
+.row input[type="checkbox"] {
+  appearance: none;
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+
+.row input[type="checkbox"]::after {
+  position: absolute;
+  content: "";
+  width: 14px;
+  height: 14px;
+  background-color: lime;
+  border-radius: 4px;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  transition: all 0.3s ease-in;
+}
+
+.row input[type="checkbox"]:checked::after {
+  opacity: 1;
+  transition: all 0.3s cubic-bezier(.33,1.38,.7,1.95);
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+#dialog button[type="submit"] {
+  padding: 4px 30px;
+  border: 2px solid whitesmoke;
+  border-radius: 10px;
+  background-color: darkgreen;
+  color: whitesmoke;
+  font-weight: bold;
+  margin-left: auto;
+}
+
+#close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 4px;
+  border: 2px solid whitesmoke;
+  border-radius: 50%;
+  background-color: crimson;
+  display: flex;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scaleY(0);
+    display: inline-block;
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scaleY(1);
+    display: block;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scaleY(1);
+    display: block;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scaleY(0);
+    display: none;
+  }
+}
+
+@keyframes backdrop-fade-in {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  to {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+}
