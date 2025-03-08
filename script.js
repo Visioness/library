@@ -71,63 +71,39 @@ function addBookToLibrary(title, author, pages, read) {
 
 
 function displayLibrary() {
+  function createElement(tag, className, textContent = "") {
+    const el = document.createElement(tag);
+    if (className) el.classList.add(className);
+    if (textContent) el.textContent = textContent;
+    return el;
+  }
+  
   clearLibraryDisplay();
 
   library.forEach(book => {
-    const bookElement = document.createElement("li");
-    const properties = document.createElement("div");
-    const title = document.createElement("span");
-    const labelAuthor = document.createElement("label");
-    const author = document.createElement("span");
-    const labelPages = document.createElement("label");
-    const pages = document.createElement("span");
-    const labelRead = document.createElement("label");
-    const read = document.createElement("span");
-    
-    const readButton = document.createElement("button");
-    const removeButton = document.createElement("button");
-    const buttonsDiv = document.createElement("div");
-
-    title.classList.add("title");
-    author.classList.add("author");
-    pages.classList.add("pages");
-    read.classList.add("read");
-    [labelAuthor, labelPages, labelRead].forEach(label => {label.classList.add("label")});
-    readButton.classList.add("button-read")
-    removeButton.classList.add("button-remove")
-    buttonsDiv.classList.add("buttons");
-    bookElement.classList.add("book");
-    properties.classList.add("properties");
-
-    title.textContent = book.title;
-    author.textContent = book.author;
-    pages.textContent = book.pages;
-    read.textContent = book.read ? "Read!" : "Not read yet!";
-    readButton.textContent = "Read";
-    removeButton.textContent = "Remove";
-    labelAuthor.textContent = "Who is the author?";
-    labelPages.textContent = "How many pages?";
-    labelRead.textContent = "Have you read?";
-    
-    buttonsDiv.appendChild(readButton);
-    buttonsDiv.appendChild(removeButton);
-
-    properties.appendChild(labelAuthor);
-    properties.appendChild(author);
-    properties.appendChild(labelPages);
-    properties.appendChild(pages);
-    properties.appendChild(labelRead);
-    properties.appendChild(read);
-    
-    bookElement.appendChild(title);
-    bookElement.appendChild(properties);
-    bookElement.appendChild(buttonsDiv);
-
-    bookElement.book = book;
+    const bookElement = createElement("li", "book");
     bookElement.setAttribute("data-id", book.id);
+    bookElement.book = book;
 
+    const title = createElement("span", "title", book.title);
+
+    const properties = createElement("div", "properties");
+    const labels = ["Who is the author?", "How many pages?", "Have you read?"];
+    const values = [book.author, book.pages, book.read ? "Read!" : "Not read yet!"];
+    labels.forEach((text, index) => {
+      const label = createElement("label", "label", text);
+      const span = createElement("span", ["author", "pages", "read"][index], values[index]);
+      properties.append(label, span);
+    });
+
+    const buttonsDiv = createElement("div", "buttons");
+    const readButton = createElement("button", "button-read", "Read");
+    const removeButton = createElement("button", "button-remove", "Remove");
+    buttonsDiv.append(readButton, removeButton);
+
+    bookElement.append(title, properties, buttonsDiv);
     libraryElement.appendChild(bookElement);
-  })
+  });
 }
 
 
