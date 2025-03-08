@@ -1,7 +1,22 @@
+@font-face {
+  font-family: Yatra;
+  src: url(fonts/YatraOne-Regular.ttf);
+}
+
 *, *::before, *::after {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+body {
+  font-family: Yatra;
+  font-size: 1.1em;
+  height: 100vh;
+  background-color: #0c1c1f;
+  color: #444;
+  display: grid;
+  grid-template-rows: 80px 1fr 80px;
 }
 
 ul,
@@ -12,6 +27,11 @@ li {
 button,
 input {
   font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: whitesmoke;
 }
 
 body {
@@ -45,7 +65,7 @@ body {
   height: 100%;
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   align-content: space-evenly;
   gap: 20px;
 }
@@ -55,66 +75,68 @@ body {
   border: 4px solid #444;
   background-color: whitesmoke;
   box-shadow: 0 0 12px palegreen;
-  color: #444;
   border-radius: 10px;
-  max-height: 240px;
-
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  grid-template-areas: 
+  grid-template-rows: auto 167px 45px;
+  grid-template-areas:
     "title title title title"
-    "author author author author"
-    "pages pages pages pages"
-    "read read read read"
+    "properties properties properties properties"
     "buttons buttons buttons buttons";
   gap: 10px;
   justify-items: center;
-}
-
-.book > :first-child,
-.book > :not(:last-child, :first-child) {
-  position: relative;
-}
-
-.book > :first-child::after,
-.book > :not(:last-child, :first-child)::after {
-  position: absolute;
-  content: "";
-  bottom: -6px;
-  width: 100%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-bottom: 1px solid gray;
-}
-
-.book > :first-child::after {
-  width: 150px;
-  border-width: 2px;
-  border-color: #444;
+  align-items: center;
+  text-align: center;
 }
 
 .title {
   grid-area: title;
-  align-self: start;
-  font-size: 1.2em;
+  font-size: 1.4em;
   font-weight: bold;
+  color: #333;
 }
 
-.author {
-  grid-area: author;
-  align-self: center;
-  text-align: right;
+.properties {
+  grid-area: properties;
+  display: grid;
+  grid-template-rows: repeat(3, 21px 24px);
+  justify-items: center;
+  align-items: center;
+  gap: 4px;
 }
 
-.pages {
-  grid-area: pages;
-  align-self: center;
+.label:has(+ .author),
+.label:has(+ .pages),
+.label:has(+ .read) {
+  font-size: 0.8em;
+  color: #248;
+  position: relative;
 }
 
+.label:has(+ .author)::before,
+.label:has(+ .pages)::before,
+.label:has(+ .read)::before,
+.label:has(+ .author)::after,
+.label:has(+ .pages)::after,
+.label:has(+ .read)::after {
+  position: absolute;
+  content: "";
+  top: 50%;
+  width: 20px;
+  border-bottom: 2px solid #248;
+}
+
+.label:has(+ .author)::before,
+.label:has(+ .pages)::before,
+.label:has(+ .read)::before {
+  left: -20px;
+}
+
+.author,
+.pages,
 .read {
-  grid-area: read;
-  align-self: center;
+  font-size: 0.9em;
+  color: #612;
 }
 
 .buttons {
@@ -127,8 +149,8 @@ body {
   align-items: center;
 }
 
-.button.read,
-.button.remove {
+.button-read,
+.button-remove {
   width: 40%;
   padding: 5px;
   border: 2px solid;
@@ -137,22 +159,22 @@ body {
   transition: all 0.2s;
 }
 
-.button.read {
+.button-read {
   background-color: rgba(20, 220, 120, 0.5);
   border-color: rgb(20, 60, 20);
 }
 
-.button.read:hover,
-.button.remove:hover {
+.button-read:hover,
+.button-remove:hover {
   transform: scale(1.1);
 }
 
-.button.read:active,
-.button.remove:active {
+.button-read:active,
+.button-remove:active {
   transform: scale(0.9);
 }
 
-.button.remove {
+.button-remove {
   background-color: rgba(220, 20, 120, 0.6);
   border-color: rgb(60, 20, 20);
 }
@@ -236,7 +258,6 @@ body {
   width: 20px;
   height: 20px;
 }
-
 
 .row input[type="checkbox"]::after {
   position: absolute;
